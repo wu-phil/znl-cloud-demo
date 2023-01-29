@@ -1,0 +1,39 @@
+server:
+  port: ${random.int[18000,18999]}
+spring:
+  application:
+    name: @pom.artifactId@
+    namespace: znl-cloud
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_HOST:192.168.88.100}:${NACOS_PORT:8848}
+        namespace: ${spring.application.namespace}
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yaml
+        namespace: ${spring.application.namespace}
+        shared-configs[0]:
+          data-id: znl-cfg
+          refresh: true
+        shared-configs[1]:
+          data-id: znl-${spring.profiles.active}
+          refresh: true
+
+  profiles:
+    active: dev
+
+dubbo:
+  application:
+    name: ${spring.application.name}
+    qos-port: ${random.int[10000,10999]}
+  registry:
+    address: nacos://${spring.cloud.nacos.config.server-addr}
+    register-mode: instance
+    parameters:
+      # 命名空间需自行创建
+      namespace: dubbo
+  protocol:
+    port: -1
+    # 启动时候检查是否有提供者
+    accesslog: true

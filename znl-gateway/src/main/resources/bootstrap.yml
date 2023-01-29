@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: @pom.artifactId@
+    namespace: znl-cloud
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_HOST:192.168.88.100}:${NACOS_PORT:8848}
+        namespace: ${spring.application.namespace}
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yaml
+        namespace: ${spring.application.namespace}
+
+  profiles:
+    active: dev
+
+
+
+
+# ========以下配置写到nacos中去===========
+#server:
+#  port: 9999
+#
+#spring:
+#  cloud:
+#    gateway:
+#      globalcors:
+#        corsConfigurations:
+#          '[/**]':
+#            allowedOrigins: "*"
+#
+#      discovery:
+#        locator:
+#          enabled: true
+#          lower-case-service-id: true
